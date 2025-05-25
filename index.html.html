@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Psychology Mentorship Program</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .interest-section h4 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .interest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .interest-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+    .interest-item input {
+      margin-right: 8px;
+    }
+    .button {
+      background: #2c3e50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 10px 0 0;
+    }
+    .button:hover {
+      background: #1a252f;
+    }
+    .success {
+      margin-top: 10px;
+      background: #d4edda;
+      padding: 10px;
+      border-radius: 5px;
+      color: #155724;
+    }
+    .admin-section {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1500&q=80" alt="Mentorship Program Banner">
+</header>
+
+<div class="container">
+  <h1>Psychology Mentorship Program</h1>
+  <p><strong>A semester-long mentorship program that connects psychology freshmen with experienced students.</strong></p>
+
+  <h2>Why Join?</h2>
+  <ul>
+    <li>💡 Get guidance from experienced psychology students</li>
+    <li>🤝 Build meaningful connections</li>
+    <li>🎯 Improve academic and personal growth</li>
+  </ul>
+
+  <h2>How It Works</h2>
+  <ul>
+    <li>✅ Fill out the form below to sign up as a mentor or mentee.</li>
+    <li>✅ You will be matched manually by the admin.</li>
+    <li>✅ You’ll receive your match via email once assigned.</li>
+  </ul>
+
+  <form id="signup-form">
+    <h2>Sign Up</h2>
+    <input type="text" id="name" placeholder="Your Full Name" required />
+    <input type="email" id="email" placeholder="Your Email" required />
+    <select id="role" required>
+      <option value="">-- Select Role --</option>
+      <option value="mentor">Mentor (Junior/Senior)</option>
+      <option value="mentee">Mentee (Freshman)</option>
+    </select>
+
+    <h3>What would you like support with?</h3>
+    <div class="interest-section">
+      <h4>🎓 Academic Support</h4>
+      <div class="interest-grid">
+        <label class="interest-item"><input type="checkbox" name="interests" value="How to study for psychology classes">How to study for psychology classes</label>
+        <label class="interest-item"><input type="checkbox" name="interests" value="Finding good places to study on campus">Finding good places to study on campus</label>
+        <label class="interest-item"><input type="checkbox" name="interests" value="Time management & staying organized">Time management & staying organized</label>
+        <label class="interest-item"><input type="checkbox" name="interests" value="Preparing for tests and assignments">Preparing for tests and assignments</label>
+      </div>
+
+      <h4>🧭 Orientation & Planning</h4>
+      <div class="interest-grid">
+        <label class="interest-item"><input type="checkbox" name="interests" value="Getting to know the campus">Getting to know the campus (labs, library, cafés, etc.)</label>
+        <label class="interest-item"><input type="checkbox" name="interests" value="What to expect in each year">What to expect in each year of the psychology program</label>
+        <label class="interest-item"><input type="checkbox" name="interests" value="Choosing electives">Choosing electives or modules wisely</label>
+        <label class="interest-item"><input type="checkbox" name="interests" value="Planning for internships">Planning for internships or practicum later</label>
+      </div>
+
+      <h4>🧠 Personal Support</h4>
+      <div class="interest-grid">
+        <label class="interest-item"><input type="checkbox" name="interests" value="Managing stress">Managing stress or feeling overwhelmed</label>
+        <label class="interest-item"><input type="checkbox" name="interests" value="Confidence & communication">Building confidence & communication skills</label>
+        <label class="interest-item"><input type="checkbox" name="interests" value="Balancing academic/social life">Balancing academic and social life</label>
+        <label class="interest-item"><input type="checkbox" name="interests" value="Making friends and fitting in">Making friends and fitting in</label>
+      </div>
+    </div>
+
+    <button type="submit" class="button">Join Now</button>
+  </form>
+
+  <div class="success" id="confirmation" style="display: none;">
+    ✅ Submission saved. Thank you!
+  </div>
+
+  <div class="admin-section" id="admin-section">
+    <h2>Admin Tools</h2>
+    <button class="button" onclick="downloadCSV('mentor')">Download Mentors</button>
+    <button class="button" onclick="downloadCSV('mentee')">Download Mentees</button>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('signup-form');
+  const mentors = JSON.parse(localStorage.getItem('mentors') || '[]');
+  const mentees = JSON.parse(localStorage.getItem('mentees') || '[]');
+  const confirmation = document.getElementById('confirmation');
+  const adminSection = document.getElementById('admin-section');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const role = document.getElementById('role').value;
+    const interests = Array.from(document.querySelectorAll('input[name="interests"]:checked')).map(cb => cb.value);
+
+    if (!name || !email || !role || interests.length === 0) {
+      alert("Please complete all fields and select at least one interest.");
+      return;
+    }
+
+    const data = { name, email, interests };
+
+    if (role === 'mentor') {
+      mentors.push(data);
+      localStorage.setItem('mentors', JSON.stringify(mentors));
+    } else {
+      mentees.push(data);
+      localStorage.setItem('mentees', JSON.stringify(mentees));
+    }
+
+    form.reset();
+    confirmation.style.display = 'block';
+    setTimeout(() => confirmation.style.display = 'none', 3000);
+  });
+
+  function downloadCSV(type) {
+    const data = type === 'mentor' ? mentors : mentees;
+    if (!data.length) {
+      alert(`No ${type}s found.`);
+      return;
+    }
+    const csv = [
+      ['Name', 'Email', 'Interests'],
+      ...data.map(p => [p.name, p.email, p.interests.join('; ')])
+    ].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${type}s.csv`;
+    link.click();
+  }
+
+  // Admin access shortcut: Ctrl + Shift + D
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'd') {
+      adminSection.style.display = 'block';
+      alert("✅ Admin tools unlocked.");
+    }
+  });
+</script>
+</body>
+</html>
